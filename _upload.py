@@ -31,16 +31,15 @@ print('files to upload:', len(files))
 
 ok = 0
 for i, (rel, full) in enumerate(files, 1):
-    # 已存在则跳过（幂等，避免重复提交）
     enc = urllib.parse.quote(rel, safe='/')
-    st0, _ = api('GET', '/repos/%s/contents/%s' % (REPO, enc))
-    if st0 == 200:
-        ok += 1
-        print('  [%d/%d] skip(exists): %s' % (i, len(files), rel))
-        continue
     with open(full, 'rb') as f:
         content = base64.b64encode(f.read()).decode()
+    # 先查是否已存在，取 sha 用于更新
+    st0, cur = api('GET', '/repos/%s/contents/%s' % (REPO, enc))
+    sha = cur.get('sha') if st0 == 200 and isinstance(cur, dict) else None
     payload = {'message': 'add %s' % rel, 'content': content, 'branch': 'main'}
+    if sha:
+        payload['sha'] = sha
     st, resp = api('PUT', '/repos/%s/contents/%s' % (REPO, enc), payload)
     if st in (200, 201):
         ok += 1
