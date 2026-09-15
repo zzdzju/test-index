@@ -1,0 +1,12 @@
+# 发布过程临时文件（不进版本库）
+_get_gh.py
+_gh_out.txt
+_curl_err.txt
+_net.txt
+_net2.txt
+gh.zip
+_git_status.txt
+_git_log.txt
+__pycache__/
+*.pyc
+_shots/
