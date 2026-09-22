@@ -42,22 +42,16 @@ a{color:inherit;text-decoration:none}
 .hero-title{font-size:44px;letter-spacing:4px;margin:12px 0 6px;font-weight:700}
 .hero-rule{width:52px;height:3px;background:var(--red);margin:20px auto 0}
 .intro{
-  max-width:900px;margin:30px auto 0;background:#fff;border:1px solid var(--line);
+  max-width:900px;margin:26px auto 0;background:#fff;border:1px solid var(--line);
   border-top:3px solid var(--red);border-radius:2px;box-shadow:0 8px 30px rgba(0,0,0,.05);
-  padding:32px 40px 34px;text-align:left;
+  padding:30px 34px 32px;text-align:center;
 }
-.intro-lead{font-size:22px;font-weight:700;margin:0;letter-spacing:.5px}
-.intro-lead .hl{color:var(--red)}
-.intro-sub{font-size:17px;font-weight:600;margin:16px 0 12px;color:#333}
+.intro .il{font-size:17.5px;font-weight:600;color:#2b2b2b;margin:0 0 12px;line-height:1.9;letter-spacing:.3px}
+.intro .il:last-child{margin-bottom:0}
+.intro .il .hl{color:var(--red)}
+.intro .il.hl{color:var(--red);font-weight:700}
 
-/* ---------- 四步流程 ---------- */
-.steps{padding:44px 0 6px}
-.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.step{border:1px solid var(--line);padding:22px 20px;border-radius:2px;background:#fff}
-.step:hover{border-color:var(--red)}
-.step-no{font-size:12px;letter-spacing:2px;color:var(--red);font-weight:700}
-.step h3{font-size:16.5px;margin:8px 0 8px}
-.step p{margin:0;font-size:13px;color:#7c7c7c;line-height:1.85}
+/* ---------- 四步流程：已移除（首页直接展示全部栏目） ---------- */
 
 /* ---------- 分区标题 ---------- */
 .sec{padding:42px 0 6px;scroll-margin-top:84px}
@@ -67,10 +61,10 @@ a{color:inherit;text-decoration:none}
 .sec-en::after{content:"";display:block;width:40px;height:2px;background:var(--line);margin:14px auto 0}
 
 /* ---------- 栏目卡片 ---------- */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px}
 .card{
   position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;
-  padding:28px 20px 24px;background:#fff;border:1px solid var(--line);border-radius:2px;
+  padding:24px 15px 20px;background:#fff;border:1px solid var(--line);border-radius:2px;
   transition:border-color .22s,box-shadow .22s,transform .22s;
 }
 .card:hover{border-color:var(--red);box-shadow:0 12px 28px rgba(216,30,6,.10);transform:translateY(-3px)}
@@ -80,13 +74,13 @@ a{color:inherit;text-decoration:none}
 }
 .card-icon{color:#4c4c4c;transition:color .22s;line-height:0}
 .card:hover .card-icon{color:var(--red)}
-.card-icon svg{width:46px;height:46px}
+.card-icon svg{width:42px;height:42px}
 .card h3{
-  font-size:17px;margin:16px 0 10px;padding:5px 13px;border:1px solid var(--line);
-  border-radius:2px;font-weight:600;letter-spacing:.5px;transition:.22s;
+  font-size:15px;margin:14px 0 9px;padding:4px 10px;border:1px solid var(--line);
+  border-radius:2px;font-weight:600;letter-spacing:.4px;transition:.22s;
 }
 .card:hover h3{border-color:var(--red);color:var(--red);background:rgba(216,30,6,.04)}
-.card p{margin:0;font-size:13px;color:#7d7d7d;line-height:1.75}
+.card p{margin:0;font-size:12.5px;color:#7d7d7d;line-height:1.7}
 
 /* ---------- 快捷索引条 ---------- */
 .chipbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:6px 0 4px}
@@ -164,6 +158,7 @@ a{color:inherit;text-decoration:none}
   padding:7px;border-radius:3px;
 }
 .qr-svg{width:100%;height:100%;display:block}
+.qr-img{width:100%;height:100%;display:block;object-fit:contain}
 .qr-cap{margin:0;font-size:12.5px;color:#7a7a7a;line-height:1.6}
 .foot-bar{background:var(--nav);color:#9a9a9a;font-size:12.5px;margin-top:32px;padding:15px 0}
 .foot-bar .wrap{display:flex;flex-wrap:wrap;gap:6px 22px;justify-content:space-between;align-items:center}
@@ -229,7 +224,7 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- 响应式 ---------- */
 @media (max-width:1100px){
-  .grid{grid-template-columns:repeat(3,1fr)}
+  .grid{grid-template-columns:repeat(4,1fr)}
   .article-wrap{grid-template-columns:1fr;gap:30px}
 }
 @media (max-width:900px){
@@ -237,7 +232,7 @@ a{color:inherit;text-decoration:none}
   .mainnav{width:100%;overflow-x:auto;border-top:1px solid rgba(255,255,255,.08);padding-top:2px}
   .mainnav a{line-height:46px;padding:0 13px;font-size:14px}
   .mainnav a .hot{top:4px}
-  .steps-grid{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:repeat(3,1fr)}
   .footer-grid{grid-template-columns:1fr;gap:26px}
   .foot-qr{text-align:left}
   .qr-box{margin:0 0 8px}
@@ -246,10 +241,8 @@ a{color:inherit;text-decoration:none}
   .grid{grid-template-columns:repeat(2,1fr)}
   .hero{padding:34px 0 6px}
   .hero-title{font-size:30px;letter-spacing:2px}
-  .intro{padding:24px 20px 26px;margin-top:22px}
-  .intro-lead{font-size:18.5px}
-  .intro-sub{font-size:15.5px}
-  .intro-list li{font-size:14.5px}
+  .intro{padding:22px 18px 24px;margin-top:20px}
+  .intro .il{font-size:15.5px}
   .sec-title{font-size:23px}
   .consult-panel{right:44px;width:min(320px,calc(100vw - 58px));padding:16px 16px 18px}
   .side-tools{right:8px;bottom:22px}
@@ -260,7 +253,6 @@ a{color:inherit;text-decoration:none}
 @media (max-width:430px){
   .grid{grid-template-columns:1fr}
   .card{padding:22px 16px 20px}
-  .steps-grid{grid-template-columns:1fr}
 }
 
 /* ---------- Hero 简介（简洁·窄） ---------- */
