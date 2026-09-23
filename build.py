@@ -815,13 +815,15 @@ CONTENT = {
 ]),
 
 "news": ("新闻报道", "精准营养技术网与主办机构的新闻播报与动态", [
- ("p", "本页汇总精准营养技术网与北京市身心智医学研究所的新闻播报、活动动态与重要通知。首页顶部的轮播区会同步展示最新动态。"),
+ ("p", "本页汇总与精准营养、疾病预防相关的新闻播报与重要动态。首页顶部的轮播区会同步展示最新内容。"),
  ("h2", "最新动态"),
  ("ul", [
-   "【示例条目】此处为示例新闻，待替换为真实新闻标题与摘要。",
+   "新思想引领新征程丨坚持预防为主 守护全民健康（央视新闻 · 2026-09-22）",
  ]),
+ ("p", "央视新闻报道：我国坚持预防为主的健康策略，推动卫生健康工作从“以治病为中心”转向“以人民健康为中心”，把健康关口前移；国家持续扩大免疫规划覆盖面、推进慢病与高发癌症早筛早治、启动儿童青少年“五健”促进行动，并推动优质医疗资源下沉基层。"),
+ ("note", "以上为官方媒体公开报道的转载与摘要，版权归原发布方所有。"),
  ("h2", "新闻如何更新"),
- ("p", "新闻在 build.py 的 SLIDES 列表中维护：新增一条 kind 为 news 的记录（标题、摘要、日期、链接），重跑 python build.py 即会出现在首页轮播区。"),
+ ("p", "新闻在 build.py 的 SLIDES 列表中维护：新增一条 kind 为 news 的记录（标题、摘要、日期、来源、链接），重跑 python build.py 即会出现在首页轮播区。"),
  ("note", "新闻内容以官方发布为准。"),
 ]),
 }
@@ -1119,6 +1121,8 @@ a{color:inherit;text-decoration:none}
 }
 .slide-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;text-align:left}
 .slide-tag{font-size:12px;letter-spacing:1.6px;color:#fff;background:var(--red);border-radius:2px;padding:3px 9px;font-weight:600}
+.slide-meta-right{display:flex;align-items:center;gap:14px}
+.slide-source{font-size:12.5px;color:var(--gray-2);letter-spacing:.5px}
 .slide-date{font-size:12.5px;color:var(--gray-2);letter-spacing:.5px}
 .slide .il{font-size:17.5px;font-weight:600;color:#2b2b2b;margin:0 0 12px;line-height:1.9;letter-spacing:.3px}
 .slide .il:last-child{margin-bottom:0}
@@ -1545,14 +1549,15 @@ SLIDES = [
     {
         "kind": "news",
         "tag": "新闻报道",
-        "date": "2026-09-23",
-        "title": "【示例】此处替换为一条真实新闻标题",
+        "date": "2026-09-22",
+        "title": "新思想引领新征程丨坚持预防为主 守护全民健康",
         "text": [
-            "此处替换为该条新闻的摘要：一到两句话说清发生了什么、与本站或主办机构有何关系。",
-            "把新闻原文链接填到 href（站内页面或 https:// 外部网址都可以），「查看详情」按钮就会指向它。",
+            "央视新闻报道：我国坚持预防为主的健康策略，推动卫生健康工作从“以治病为中心”转向“以人民健康为中心”，把健康关口前移。",
+            "报道提到，国家持续扩大免疫规划覆盖面、推进慢病与高发癌症早筛早治、启动儿童青少年“五健”促进行动，并推动优质医疗资源下沉基层。",
         ],
-        "href": "pages/news.html",
-        "more": "查看详情",
+        "source": "央视新闻",
+        "href": "https://mbd.baidu.com/newspage/data/landingsuper?context=%7B%22nid%22%3A%22news_9271988974949925274%22%7D&amp;pageType=1",
+        "more": "阅读原文",
     },
 ]
 
@@ -1561,10 +1566,13 @@ def slide_html(s, i):
     """渲染单个滑动页。"""
     kind = s.get("kind", "news")
     tag, date = s.get("tag", ""), s.get("date", "")
+    src_name = s.get("source", "")
     head = ""
-    if tag or date:
-        head = '<div class="slide-meta">%s%s</div>' % (
-            '<span class="slide-tag">%s</span>' % tag if tag else "<span></span>",
+    if tag or date or src_name:
+        head = ('<div class="slide-meta"><span class="slide-tag">%s</span>'
+                '<span class="slide-meta-right">%s%s</span></div>') % (
+            tag,
+            '<span class="slide-source">来源：%s</span>' % src_name if src_name else "",
             '<span class="slide-date">%s</span>' % date if date else "",
         )
     if kind == "intro":
@@ -1807,7 +1815,7 @@ README.md             本说明
 | 证书页 | 【占位】证书名称一/二/三 | 替换为真实证书扫描件 |
 | 图书页 | 【占位】《图书名称一/二/三》 | 替换为真实书名与封面 |
 | 文章页 | 主题分类框架 | 待填充真实文章列表 |
-| 首页轮播示例新闻 | 【示例】占位文案 | 把 build.py 里 SLIDES 中那条 news 记录换成真实新闻 |
+| 首页轮播新闻 | 已接入真实新闻（央视新闻 · 2026-09-22） | 新增新闻：在 build.py 的 SLIDES 里加一条 kind=news 记录 |
 | 咨询表单 | 前端演示，无后端 | 上线需接后端接口或表单服务 |
 
 ## 内容说明
