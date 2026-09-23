@@ -250,7 +250,7 @@ a{color:inherit;text-decoration:none}
 .hero-text .hero-org{margin-left:auto;margin-right:auto}
 .hero-text .hero-rule{margin:18px auto 0}
 
-/* ---------- 首页顶部轮播（左右滑动 + 自动播放） ---------- */
+/* ---------- 首页顶部轮播（左右滑动 + 自动播放 + 类型配色 / 图标图示） ---------- */
 .slider{position:relative;max-width:900px;margin:24px auto 0;padding:0 38px}
 .slider-viewport{
   overflow:hidden;background:#fff;border:1px solid var(--line);
@@ -259,8 +259,28 @@ a{color:inherit;text-decoration:none}
 .slider-track{display:flex;align-items:stretch;transition:transform .6s cubic-bezier(.4,.02,.2,1);will-change:transform}
 .slide{
   flex:0 0 100%;width:100%;min-width:0;box-sizing:border-box;overflow-wrap:anywhere;
-  display:flex;flex-direction:column;justify-content:center;padding:30px 34px 32px;
+  display:flex;flex-direction:column;justify-content:center;position:relative;
+  padding:30px 30px 32px 34px;
+  background:linear-gradient(135deg,var(--tone-bg,#fff) 0%,#fff 68%);
 }
+.slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--tone,var(--red))}
+.slide-grid{display:flex;align-items:center;gap:26px;width:100%}
+.slide-main{flex:1 1 auto;min-width:0}
+/* 右侧图标图示：健康 · 爱护 */
+.slide-art{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--tone,var(--red))}
+.art-main{
+  width:104px;height:104px;border-radius:20px;display:grid;place-items:center;background:#fff;
+  border:1px solid var(--tone-line,#f0ded9);box-shadow:0 10px 24px rgba(190,60,30,.10);
+  transition:transform .3s ease;
+}
+.art-main svg{width:54px;height:54px}
+.slide:hover .art-main{transform:translateY(-3px)}
+.art-badges{display:flex;gap:10px}
+.art-badge{
+  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff;
+  border:1px solid var(--tone-line,#f0ded9);box-shadow:0 4px 10px rgba(190,60,30,.07);
+}
+.art-badge svg{width:19px;height:19px}
 .slide-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;text-align:left}
 .slide-tag{font-size:12px;letter-spacing:1.6px;color:#fff;background:var(--red);border-radius:2px;padding:3px 9px;font-weight:600}
 .slide-meta-right{display:flex;align-items:center;gap:14px}
@@ -274,6 +294,15 @@ a{color:inherit;text-decoration:none}
 .slide-text{font-size:14.5px;color:#6a6a6a;line-height:1.95;margin:0 0 8px;text-align:left}
 .slide-more{display:inline-block;margin-top:4px;font-size:13.5px;font-weight:600;color:var(--red);text-align:left}
 .slide-more:hover{text-decoration:underline}
+/* 按内容类型分色：本站简介=暖红 / 新闻报道=沉蓝 / 产品介绍=暖橙 */
+.slide-intro{--tone:var(--red);--tone-bg:#fff6f3;--tone-line:#f3d9d2}
+.slide-news{--tone:#1e5aa8;--tone-bg:#f3f7fc;--tone-line:#d6e2f1}
+.slide-product{--tone:#d97706;--tone-bg:#fff8ed;--tone-line:#f2e1c6}
+.slide-news .slide-tag{background:#1e5aa8}
+.slide-product .slide-tag{background:#d97706}
+.slide-news .slide-title{color:#173f74}
+.slide-news .slide-more{color:#1e5aa8}
+.slide-product .slide-more{color:#c2670a}
 .slider-arrow{
   position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;z-index:2;
   display:grid;place-items:center;cursor:pointer;border-radius:50%;
@@ -289,14 +318,24 @@ a{color:inherit;text-decoration:none}
 .dot.is-active{width:22px;border-radius:5px;background:var(--red);border-color:var(--red)}
 @media (prefers-reduced-motion: reduce){
   .slider-track{transition:none}
+  .slide:hover .art-main{transform:none}
 }
 @media (max-width:760px){
   .hero-inner{max-width:100%}
   .slider{padding:0;margin-top:20px}
   .slider-arrow{display:none}
-  .slide{padding:24px 20px 26px}
+  .slide{padding:20px 15px 22px 18px}
+  .slide-grid{gap:12px;align-items:flex-start}
+  .slide-meta{flex-wrap:wrap;gap:8px 10px;margin-bottom:10px}
+  .slide-tag{white-space:nowrap}
+  .slide-source{display:none}
+  .slide-date{white-space:nowrap}
   .slide .il{font-size:15.5px}
   .slide-title{font-size:17px}
   .slide-text{font-size:14px}
   .dot.is-active{width:18px}
+  .slide-art{gap:0}
+  .art-main{width:56px;height:56px;border-radius:13px}
+  .art-main svg{width:30px;height:30px}
+  .art-badges{display:none}
 }
