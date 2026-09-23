@@ -253,17 +253,17 @@ a{color:inherit;text-decoration:none}
 /* ---------- 首页顶部轮播（左右滑动 + 自动播放 + 类型配色 / 图标图示） ---------- */
 .slider{position:relative;max-width:900px;margin:24px auto 0;padding:0 38px}
 .slider-viewport{
-  position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);
-  border-top:3px solid var(--red);border-radius:6px;box-shadow:0 16px 40px rgba(60,30,20,.08);
+  position:relative;overflow:hidden;background:#fff;
+  border:3px solid var(--red);border-radius:6px;box-shadow:0 16px 40px rgba(60,30,20,.08);
 }
 .slider-track{display:flex;align-items:stretch;transition:transform .6s cubic-bezier(.4,.02,.2,1);will-change:transform}
 .slide{
   flex:0 0 100%;width:100%;min-width:0;box-sizing:border-box;overflow-wrap:anywhere;
   display:flex;flex-direction:column;justify-content:center;position:relative;
-  padding:30px 30px 32px 34px;
+  padding:30px 30px 34px;
   background:linear-gradient(135deg,var(--tone-bg,#fff) 0%,#fff 68%);
 }
-.slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--tone,var(--red))}
+/* 左侧类型色条已并入 viewport 的四边红框（2026-09-23），此处不再单独绘制 */
 .slide-grid{display:flex;align-items:center;gap:26px;width:100%}
 .slide-main{flex:1 1 auto;min-width:0}
 /* ---------- A · 描边同心圆环：主图标外套三层递减圆环，取「精准聚焦」之意 ---------- */
@@ -297,9 +297,11 @@ a{color:inherit;text-decoration:none}
   border:1px solid var(--tone-line,#f0ded9);box-shadow:0 4px 10px rgba(190,60,30,.07);
 }
 .art-badge svg{width:19px;height:19px}
-.slide-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;text-align:left}
-/* ---------- C · 编号：左端 01 / 02 大号数字，与胶囊标签以细竖线分隔 ---------- */
-.slide-head{display:flex;align-items:center;gap:11px;min-width:0}
+.slide-meta{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-bottom:14px;text-align:left}
+/* ---------- C（2026-09-23 停用）：编号 01/02 + 胶囊标签，按要求不再渲染。
+   保留规则以便恢复：恢复时把 slide_html() 里的 .slide-head 输出加回即可
+   （.slide-head 已带 margin-right:auto，与 .slide-meta 的 flex-end 配合可自动回到左侧）。 ---------- */
+.slide-head{display:flex;align-items:center;gap:11px;min-width:0;margin-right:auto}
 .slide-num{
   position:relative;padding-right:12px;font-size:22px;font-weight:800;line-height:1;
   color:var(--red);letter-spacing:-.5px;font-variant-numeric:tabular-nums;
@@ -331,31 +333,38 @@ a{color:inherit;text-decoration:none}
 .slider-arrow:hover{border-color:var(--red);color:var(--red);box-shadow:0 6px 16px rgba(216,30,6,.14)}
 .slider-arrow.is-prev{left:0}
 .slider-arrow.is-next{right:0}
-/* ---------- C · 播放进度条：贴在卡片底边，随自动播放走完一格 ---------- */
-.slider-progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(216,30,6,.08);z-index:2}
-.slider-progress .bar{
-  display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:left center;
-  background:linear-gradient(90deg,rgba(216,30,6,.5),var(--red));
-  animation:sliderBar var(--slide-dur,5200ms) linear forwards;
-}
-@keyframes sliderBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-.slider.is-hold .slider-progress .bar{animation-play-state:paused}
+/* ---------- C · 时间进度做进圆点：激活的圆点内部随自动播放填充。
+   放在卡片外，卡片四边红框才能保持等宽。 ---------- */
 .slider-dots{display:flex;justify-content:center;gap:9px;margin-top:16px}
-.dot{width:8px;height:8px;padding:0;border-radius:50%;border:1px solid #d5d5d5;background:#fff;cursor:pointer;transition:.22s}
+.dot{
+  position:relative;overflow:hidden;width:8px;height:8px;padding:0;border-radius:50%;
+  border:1px solid #d5d5d5;background:#fff;cursor:pointer;
+  transition:width .22s ease,border-color .22s ease;
+}
 .dot:hover{border-color:var(--red)}
-.dot.is-active{width:22px;border-radius:5px;background:var(--red);border-color:var(--red)}
+.dot.is-active{width:26px;border-radius:5px;background:#fff;border-color:rgba(216,30,6,.35)}
+.dot-fill{
+  position:absolute;left:0;top:0;bottom:0;width:0;background:var(--red);
+  border-radius:inherit;
+}
+.dot.is-active .dot-fill{animation:sliderBar var(--slide-dur,5200ms) linear forwards}
+.slider.is-hold .dot.is-active .dot-fill{animation-play-state:paused}
+/* 用 width 而非 scaleX：缩放会把胶囊两端的圆角压扁 */
+@keyframes sliderBar{from{width:0}to{width:100%}}
 @media (prefers-reduced-motion: reduce){
   .slider-track{transition:none}
   .slide:hover .art-main{transform:none}
   .slide:hover .art-main::before{inset:-10px}
   .slide:hover .art-main::after{inset:-20px}
-  .slider-progress{display:none}
+  /* 关掉动效时，激活圆点直接实心显示 */
+  .dot-fill{display:none}
+  .dot.is-active{background:var(--red);border-color:var(--red)}
 }
 @media (max-width:760px){
   .hero-inner{max-width:100%}
   .slider{padding:0;margin-top:20px}
   .slider-arrow{display:none}
-  .slide{padding:20px 15px 22px 18px}
+  .slide{padding:20px 16px 22px}
   .slide-grid{gap:12px;align-items:flex-start}
   .slide-meta{flex-wrap:wrap;gap:8px 10px;margin-bottom:10px}
   .slide-tag{white-space:nowrap}
@@ -364,7 +373,7 @@ a{color:inherit;text-decoration:none}
   .slide .il{font-size:15.5px}
   .slide-title{font-size:17px}
   .slide-text{font-size:14px}
-  .dot.is-active{width:18px}
+  .dot.is-active{width:22px}
   .slide-num{font-size:17px;padding-right:9px}
   .slide-num::after{height:12px}
   .slide-head{gap:8px}
