@@ -297,7 +297,7 @@ a{color:inherit;text-decoration:none}
   border:1px solid var(--tone-line,#f0ded9);box-shadow:0 4px 10px rgba(190,60,30,.07);
 }
 .art-badge svg{width:19px;height:19px}
-.slide-meta{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-bottom:14px;text-align:left}
+.slide-meta{display:flex;justify-content:flex-start;align-items:center;gap:12px;margin-bottom:14px;text-align:left}
 /* ---------- C（2026-09-23 停用）：编号 01/02 + 胶囊标签，按要求不再渲染。
    保留规则以便恢复：恢复时把 slide_html() 里的 .slide-head 输出加回即可
    （.slide-head 已带 margin-right:auto，与 .slide-meta 的 flex-end 配合可自动回到左侧）。 ---------- */
@@ -318,7 +318,7 @@ a{color:inherit;text-decoration:none}
 .slide .il:last-child{margin-bottom:0}
 .slide .il .hl{color:var(--red)}
 .slide .il.hl{color:var(--red);font-weight:700}
-.slide-title{font-size:19.5px;font-weight:700;letter-spacing:.4px;line-height:1.55;margin:0 0 10px;text-align:left}
+.slide-title{font-size:19.5px;font-weight:700;letter-spacing:.4px;line-height:1.55;margin:0 0 8px;text-align:left}
 .slide-text{font-size:14.5px;color:#6a6a6a;line-height:1.95;margin:0 0 8px;text-align:left}
 .slide-more{display:inline-block;margin-top:4px;font-size:13.5px;font-weight:600;color:var(--red);text-align:left}
 .slide-more:hover{text-decoration:underline}
@@ -368,7 +368,7 @@ a{color:inherit;text-decoration:none}
   .slide-grid{gap:12px;align-items:flex-start}
   .slide-meta{flex-wrap:wrap;gap:8px 10px;margin-bottom:10px}
   .slide-tag{white-space:nowrap}
-  .slide-source{display:none}
+  .slide-source{white-space:nowrap}
   .slide-date{white-space:nowrap}
   .slide .il{font-size:15.5px}
   .slide-title{font-size:17px}
