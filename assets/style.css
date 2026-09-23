@@ -253,8 +253,8 @@ a{color:inherit;text-decoration:none}
 /* ---------- 首页顶部轮播（左右滑动 + 自动播放 + 类型配色 / 图标图示） ---------- */
 .slider{position:relative;max-width:900px;margin:24px auto 0;padding:0 38px}
 .slider-viewport{
-  overflow:hidden;background:#fff;border:1px solid var(--line);
-  border-top:3px solid var(--red);border-radius:2px;box-shadow:0 8px 30px rgba(0,0,0,.05);
+  position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);
+  border-top:3px solid var(--red);border-radius:6px;box-shadow:0 16px 40px rgba(60,30,20,.08);
 }
 .slider-track{display:flex;align-items:stretch;transition:transform .6s cubic-bezier(.4,.02,.2,1);will-change:transform}
 .slide{
@@ -266,15 +266,31 @@ a{color:inherit;text-decoration:none}
 .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--tone,var(--red))}
 .slide-grid{display:flex;align-items:center;gap:26px;width:100%}
 .slide-main{flex:1 1 auto;min-width:0}
-/* 右侧图标图示：健康 · 爱护 */
-.slide-art{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--tone,var(--red))}
-.art-main{
-  width:104px;height:104px;border-radius:20px;display:grid;place-items:center;background:#fff;
-  border:1px solid var(--tone-line,#f0ded9);box-shadow:0 10px 24px rgba(190,60,30,.10);
-  transition:transform .3s ease;
+/* ---------- A · 描边同心圆环：主图标外套三层递减圆环，取「精准聚焦」之意 ---------- */
+.slide-art{
+  flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:24px;
+  padding:26px 22px;color:var(--tone,var(--red));
 }
-.art-main svg{width:54px;height:54px}
+.art-main{
+  position:relative;width:96px;height:96px;border-radius:50%;display:grid;place-items:center;
+  background:#fff;border:1px solid var(--tone-line,#f0ded9);
+  box-shadow:0 10px 26px rgba(190,60,30,.12);
+  transition:transform .35s ease;
+}
+.art-main::before{
+  content:"";position:absolute;inset:-10px;border-radius:50%;
+  border:1px dashed rgba(216,30,6,.32);
+  transition:inset .35s ease,border-color .35s ease;
+}
+.art-main::after{
+  content:"";position:absolute;inset:-20px;border-radius:50%;
+  border:1px solid rgba(216,30,6,.13);
+  transition:inset .35s ease,border-color .35s ease;
+}
+.art-main svg{width:48px;height:48px}
 .slide:hover .art-main{transform:translateY(-3px)}
+.slide:hover .art-main::before{inset:-14px;border-color:rgba(216,30,6,.5)}
+.slide:hover .art-main::after{inset:-27px;border-color:rgba(216,30,6,.22)}
 .art-badges{display:flex;gap:10px}
 .art-badge{
   width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff;
@@ -282,7 +298,17 @@ a{color:inherit;text-decoration:none}
 }
 .art-badge svg{width:19px;height:19px}
 .slide-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;text-align:left}
-.slide-tag{font-size:12px;letter-spacing:1.6px;color:#fff;background:var(--red);border-radius:2px;padding:3px 9px;font-weight:600}
+/* ---------- C · 编号：左端 01 / 02 大号数字，与胶囊标签以细竖线分隔 ---------- */
+.slide-head{display:flex;align-items:center;gap:11px;min-width:0}
+.slide-num{
+  position:relative;padding-right:12px;font-size:22px;font-weight:800;line-height:1;
+  color:var(--red);letter-spacing:-.5px;font-variant-numeric:tabular-nums;
+}
+.slide-num::after{
+  content:"";position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:1px;height:15px;background:rgba(216,30,6,.3);
+}
+.slide-tag{font-size:12px;letter-spacing:1.6px;color:#fff;background:var(--red);border-radius:999px;padding:4px 12px;font-weight:600}
 .slide-meta-right{display:flex;align-items:center;gap:14px}
 .slide-source{font-size:12.5px;color:var(--gray-2);letter-spacing:.5px}
 .slide-date{font-size:12.5px;color:var(--gray-2);letter-spacing:.5px}
@@ -305,6 +331,15 @@ a{color:inherit;text-decoration:none}
 .slider-arrow:hover{border-color:var(--red);color:var(--red);box-shadow:0 6px 16px rgba(216,30,6,.14)}
 .slider-arrow.is-prev{left:0}
 .slider-arrow.is-next{right:0}
+/* ---------- C · 播放进度条：贴在卡片底边，随自动播放走完一格 ---------- */
+.slider-progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(216,30,6,.08);z-index:2}
+.slider-progress .bar{
+  display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:left center;
+  background:linear-gradient(90deg,rgba(216,30,6,.5),var(--red));
+  animation:sliderBar var(--slide-dur,5200ms) linear forwards;
+}
+@keyframes sliderBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.slider.is-hold .slider-progress .bar{animation-play-state:paused}
 .slider-dots{display:flex;justify-content:center;gap:9px;margin-top:16px}
 .dot{width:8px;height:8px;padding:0;border-radius:50%;border:1px solid #d5d5d5;background:#fff;cursor:pointer;transition:.22s}
 .dot:hover{border-color:var(--red)}
@@ -312,6 +347,9 @@ a{color:inherit;text-decoration:none}
 @media (prefers-reduced-motion: reduce){
   .slider-track{transition:none}
   .slide:hover .art-main{transform:none}
+  .slide:hover .art-main::before{inset:-10px}
+  .slide:hover .art-main::after{inset:-20px}
+  .slider-progress{display:none}
 }
 @media (max-width:760px){
   .hero-inner{max-width:100%}
@@ -327,8 +365,15 @@ a{color:inherit;text-decoration:none}
   .slide-title{font-size:17px}
   .slide-text{font-size:14px}
   .dot.is-active{width:18px}
-  .slide-art{gap:0}
-  .art-main{width:56px;height:56px;border-radius:13px}
-  .art-main svg{width:30px;height:30px}
+  .slide-num{font-size:17px;padding-right:9px}
+  .slide-num::after{height:12px}
+  .slide-head{gap:8px}
+  .slide-art{gap:0;padding:12px 7px}
+  .art-main{width:56px;height:56px;border-radius:50%}
+  .art-main svg{width:28px;height:28px}
+  .art-main::before{inset:-6px}
+  .art-main::after{inset:-11px}
+  .slide:hover .art-main::before{inset:-6px}
+  .slide:hover .art-main::after{inset:-11px}
   .art-badges{display:none}
 }
