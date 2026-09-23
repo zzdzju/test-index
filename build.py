@@ -813,6 +813,17 @@ CONTENT = {
  ("p", "邮箱：810476008@qq.com　电话：16710241939。请说明您的机构名称、所在地区与合作意向，我们会尽快与您联系。"),
  ("note", "本页为合作加盟说明，具体合作条款以双方正式协议为准。"),
 ]),
+
+"news": ("新闻报道", "精准营养技术网与主办机构的新闻播报与动态", [
+ ("p", "本页汇总精准营养技术网与北京市身心智医学研究所的新闻播报、活动动态与重要通知。首页顶部的轮播区会同步展示最新动态。"),
+ ("h2", "最新动态"),
+ ("ul", [
+   "【示例条目】此处为示例新闻，待替换为真实新闻标题与摘要。",
+ ]),
+ ("h2", "新闻如何更新"),
+ ("p", "新闻在 build.py 的 SLIDES 列表中维护：新增一条 kind 为 news 的记录（标题、摘要、日期、链接），重跑 python build.py 即会出现在首页轮播区。"),
+ ("note", "新闻内容以官方发布为准。"),
+]),
 }
 
 # --------------------------------------------------------------------------
@@ -833,6 +844,7 @@ for _sid, _tcn, _ten, _slugs in SECTIONS:
 
 NAV = [
     ("单位简介", "pages/unit-intro.html", False, "unit-intro"),
+    ("新闻报道", "pages/news.html", False, "news"),
     ("合作加盟", "pages/cooperation.html", False, "cooperation"),
     ("意见建议", "pages/feedback.html", False, "feedback"),
     ("联系我们", "index.html#contact", False, None),
@@ -885,15 +897,6 @@ a{color:inherit;text-decoration:none}
 .hero-org{color:var(--gray-2);font-size:13px;letter-spacing:2px}
 .hero-title{font-size:44px;letter-spacing:4px;margin:12px 0 6px;font-weight:700}
 .hero-rule{width:52px;height:3px;background:var(--red);margin:20px auto 0}
-.intro{
-  max-width:900px;margin:26px auto 0;background:#fff;border:1px solid var(--line);
-  border-top:3px solid var(--red);border-radius:2px;box-shadow:0 8px 30px rgba(0,0,0,.05);
-  padding:30px 34px 32px;text-align:center;
-}
-.intro .il{font-size:17.5px;font-weight:600;color:#2b2b2b;margin:0 0 12px;line-height:1.9;letter-spacing:.3px}
-.intro .il:last-child{margin-bottom:0}
-.intro .il .hl{color:var(--red)}
-.intro .il.hl{color:var(--red);font-weight:700}
 
 /* ---------- 四步流程：已移除（首页直接展示全部栏目） ---------- */
 
@@ -1085,8 +1088,6 @@ a{color:inherit;text-decoration:none}
   .grid{grid-template-columns:repeat(2,1fr)}
   .hero{padding:34px 0 6px}
   .hero-title{font-size:30px;letter-spacing:2px}
-  .intro{padding:22px 18px 24px;margin-top:20px}
-  .intro .il{font-size:15.5px}
   .sec-title{font-size:23px}
   .consult-panel{right:44px;width:min(320px,calc(100vw - 58px));padding:16px 16px 18px}
   .side-tools{right:8px;bottom:22px}
@@ -1099,14 +1100,59 @@ a{color:inherit;text-decoration:none}
   .card{padding:22px 16px 20px}
 }
 
-/* ---------- Hero 简介（简洁·窄） ---------- */
-.hero-inner{max-width:820px;margin:0 auto;text-align:center}
+/* ---------- Hero 头部 ---------- */
+.hero-inner{max-width:960px;margin:0 auto;text-align:center}
 .hero-text{text-align:center}
 .hero-text .hero-org{margin-left:auto;margin-right:auto}
 .hero-text .hero-rule{margin:18px auto 0}
-.hero-text .intro{margin:22px auto 0;max-width:640px}
+
+/* ---------- 首页顶部轮播（左右滑动 + 自动播放） ---------- */
+.slider{position:relative;max-width:900px;margin:24px auto 0;padding:0 38px}
+.slider-viewport{
+  overflow:hidden;background:#fff;border:1px solid var(--line);
+  border-top:3px solid var(--red);border-radius:2px;box-shadow:0 8px 30px rgba(0,0,0,.05);
+}
+.slider-track{display:flex;align-items:stretch;transition:transform .6s cubic-bezier(.4,.02,.2,1);will-change:transform}
+.slide{
+  flex:0 0 100%;min-width:100%;box-sizing:border-box;
+  display:flex;flex-direction:column;justify-content:center;padding:30px 34px 32px;
+}
+.slide-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;text-align:left}
+.slide-tag{font-size:12px;letter-spacing:1.6px;color:#fff;background:var(--red);border-radius:2px;padding:3px 9px;font-weight:600}
+.slide-date{font-size:12.5px;color:var(--gray-2);letter-spacing:.5px}
+.slide .il{font-size:17.5px;font-weight:600;color:#2b2b2b;margin:0 0 12px;line-height:1.9;letter-spacing:.3px}
+.slide .il:last-child{margin-bottom:0}
+.slide .il .hl{color:var(--red)}
+.slide .il.hl{color:var(--red);font-weight:700}
+.slide-title{font-size:19.5px;font-weight:700;letter-spacing:.4px;line-height:1.55;margin:0 0 10px;text-align:left}
+.slide-text{font-size:14.5px;color:#6a6a6a;line-height:1.95;margin:0 0 8px;text-align:left}
+.slide-more{display:inline-block;margin-top:4px;font-size:13.5px;font-weight:600;color:var(--red);text-align:left}
+.slide-more:hover{text-decoration:underline}
+.slider-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;z-index:2;
+  display:grid;place-items:center;cursor:pointer;border-radius:50%;
+  border:1px solid var(--line);background:#fff;color:#9a9a9a;transition:.22s;
+}
+.slider-arrow svg{width:18px;height:18px}
+.slider-arrow:hover{border-color:var(--red);color:var(--red);box-shadow:0 6px 16px rgba(216,30,6,.14)}
+.slider-arrow.is-prev{left:0}
+.slider-arrow.is-next{right:0}
+.slider-dots{display:flex;justify-content:center;gap:9px;margin-top:16px}
+.dot{width:8px;height:8px;padding:0;border-radius:50%;border:1px solid #d5d5d5;background:#fff;cursor:pointer;transition:.22s}
+.dot:hover{border-color:var(--red)}
+.dot.is-active{width:22px;border-radius:5px;background:var(--red);border-color:var(--red)}
+@media (prefers-reduced-motion: reduce){
+  .slider-track{transition:none}
+}
 @media (max-width:760px){
   .hero-inner{max-width:100%}
+  .slider{padding:0;margin-top:20px}
+  .slider-arrow{display:none}
+  .slide{padding:24px 20px 26px}
+  .slide .il{font-size:15.5px}
+  .slide-title{font-size:17px}
+  .slide-text{font-size:14px}
+  .dot.is-active{width:18px}
 }
 """
 
@@ -1161,6 +1207,91 @@ JS = r"""
     window.addEventListener('scroll', syncTop);
     syncTop();
   }
+})();
+
+(function () {
+  /* 首页顶部轮播：横向滑动 + 自动播放 + 箭头 / 圆点 / 触摸 / 键盘 */
+  var root = document.getElementById('heroSlider');
+  if (!root) return;
+  var track = root.querySelector('.slider-track');
+  var slides = root.querySelectorAll('.slide');
+  var dots = root.querySelectorAll('.dot');
+  var prev = root.querySelector('.is-prev');
+  var next = root.querySelector('.is-next');
+  var total = slides.length;
+  if (!track || total < 2) return;
+
+  var idx = 0;
+  var timer = null;
+  var gap = parseInt(root.getAttribute('data-interval'), 10) || 5200;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function render() {
+    track.style.transform = 'translateX(' + (-idx * 100) + '%)';
+    for (var i = 0; i < total; i++) {
+      var on = i === idx;
+      slides[i].classList.toggle('is-active', on);
+      slides[i].setAttribute('aria-hidden', on ? 'false' : 'true');
+      if (dots[i]) {
+        dots[i].classList.toggle('is-active', on);
+        dots[i].setAttribute('aria-selected', on ? 'true' : 'false');
+      }
+    }
+  }
+  function go(n) { idx = ((n % total) + total) % total; render(); }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  function start() {
+    if (reduce) return;
+    stop();
+    timer = setInterval(function () { go(idx + 1); }, gap);
+  }
+  function jump(n) { stop(); go(n); start(); }
+
+  if (prev) prev.addEventListener('click', function () { jump(idx - 1); });
+  if (next) next.addEventListener('click', function () { jump(idx + 1); });
+
+  Array.prototype.forEach.call(dots, function (d) {
+    d.addEventListener('click', function () {
+      jump(parseInt(d.getAttribute('data-index'), 10) || 0);
+    });
+  });
+
+  /* 鼠标悬停 / 获得焦点时暂停，离开后继续 */
+  root.addEventListener('mouseenter', stop);
+  root.addEventListener('mouseleave', start);
+  root.addEventListener('focusin', stop);
+  root.addEventListener('focusout', start);
+
+  /* 键盘左右方向键 */
+  root.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') { jump(idx - 1); }
+    else if (e.key === 'ArrowRight') { jump(idx + 1); }
+  });
+
+  /* 触摸滑动（手机） */
+  var startX = 0, startY = 0, swiping = false;
+  root.addEventListener('touchstart', function (e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    swiping = true;
+    stop();
+  }, { passive: true });
+  root.addEventListener('touchend', function (e) {
+    if (!swiping) return;
+    swiping = false;
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? idx + 1 : idx - 1);
+    start();
+  }, { passive: true });
+
+  /* 页面切到后台时暂停，回来再继续 */
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { stop(); } else { start(); }
+  });
+
+  render();
+  start();
 })();
 """
 
@@ -1390,6 +1521,91 @@ def card_html(slug):
 
 # 首页：四行居中简介 + 40 栏目网格（已移除 Hero 插画、信任背书区与四步流程区）。
 
+# --------------------------------------------------------------------------
+# 首页顶部轮播（横向滑动 + 自动播放）
+# 增删滑动页：只改下面的 SLIDES 列表，重跑 python build.py 即可。
+#   kind  : intro=本站简介 | news=新闻播报 | product=产品介绍
+#   tag   : 左上角标签文字（intro 留空则不显示标签行）
+#   title : 标题
+#   text  : 正文段落（列表，每项一段）
+#   date  : 右上角日期（可留空）
+#   href  : 「查看详情」跳转地址（站内如 pages/news.html，或 https:// 外链）；留空则不显示按钮
+#   more  : 按钮文字，默认「查看详情」
+#   html  : 仅 kind=intro 使用，直接写 HTML 片段
+# 轮播顺序 = 列表顺序；列表只有 1 项时不启动自动滑动。
+# --------------------------------------------------------------------------
+SLIDES = [
+    {
+        "kind": "intro",
+        "html": '<p class="il">人类常见病主因：<span class="hl">稀里糊涂吃，糊里糊涂病！</span></p>'
+                '<p class="il">精准营养技术可预测常见病，也知道您体内食物营养丰歉，</p>'
+                '<p class="il">设计个人、家庭、团餐、食堂、餐厅科学营养食谱！</p>'
+                '<p class="il hl">饮食越科学，身心智越健康！</p>',
+    },
+    {
+        "kind": "news",
+        "tag": "新闻报道",
+        "date": "2026-09-23",
+        "title": "【示例】此处替换为一条真实新闻标题",
+        "text": [
+            "此处替换为该条新闻的摘要：一到两句话说清发生了什么、与本站或主办机构有何关系。",
+            "把新闻原文链接填到 href（站内页面或 https:// 外部网址都可以），「查看详情」按钮就会指向它。",
+        ],
+        "href": "pages/news.html",
+        "more": "查看详情",
+    },
+]
+
+
+def slide_html(s, i):
+    """渲染单个滑动页。"""
+    kind = s.get("kind", "news")
+    tag, date = s.get("tag", ""), s.get("date", "")
+    head = ""
+    if tag or date:
+        head = '<div class="slide-meta">%s%s</div>' % (
+            '<span class="slide-tag">%s</span>' % tag if tag else "<span></span>",
+            '<span class="slide-date">%s</span>' % date if date else "",
+        )
+    if kind == "intro":
+        body = s.get("html", "")
+    else:
+        parts = []
+        if s.get("title"):
+            parts.append('<h3 class="slide-title">%s</h3>' % s["title"])
+        for para in s.get("text", []):
+            parts.append('<p class="slide-text">%s</p>' % para)
+        if s.get("href"):
+            parts.append('<a class="slide-more" href="%s">%s &rarr;</a>'
+                         % (s["href"], s.get("more", "查看详情")))
+        body = "".join(parts)
+    return ('<div class="slide slide-%s" role="group" aria-roledescription="slide" '
+            'aria-label="第 %d 页，共 %d 页">%s<div class="slide-body">%s</div></div>'
+            % (kind, i + 1, len(SLIDES), head, body))
+
+
+def slider_html():
+    """首页顶部轮播区：横向滑动 + 自动播放 + 箭头 / 圆点 / 触摸滑动。"""
+    n = len(SLIDES)
+    slides = "\n".join("      " + slide_html(s, i) for i, s in enumerate(SLIDES))
+    dots = "".join(
+        '<button class="dot%s" type="button" data-index="%d" aria-label="第 %d 页"></button>'
+        % (" is-active" if i == 0 else "", i, i + 1)
+        for i in range(n)
+    )
+    return """
+    <div class="slider" id="heroSlider" data-interval="5200" tabindex="0" aria-label="首页轮播">
+      <div class="slider-viewport">
+        <div class="slider-track">
+%s
+        </div>
+      </div>
+      <button class="slider-arrow is-prev" type="button" aria-label="上一页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="slider-arrow is-next" type="button" aria-label="下一页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div class="slider-dots">%s</div>
+    </div>""" % (slides, dots)
+
+
 def build_index():
     cards = "\n".join(card_html(s) for s in ORDER)
     secs_html = """
@@ -1408,17 +1624,12 @@ def build_index():
       <div class="hero-org">%s &nbsp;主办</div>
       <h1 class="hero-title">%s</h1>
       <div class="hero-rule"></div>
-      <div class="intro">
-        <p class="il">人类常见病主因：<span class="hl">稀里糊涂吃，糊里糊涂病！</span></p>
-        <p class="il">精准营养技术可预测常见病，也知道您体内食物营养丰歉，</p>
-        <p class="il">设计个人、家庭、团餐、食堂、餐厅科学营养食谱！</p>
-        <p class="il hl">饮食越科学，身心智越健康！</p>
-      </div>
+      %s
     </div>
   </div>
 </section>
 %s
-""" % (ORG_NAME, SITE_NAME, secs_html)
+""" % (ORG_NAME, SITE_NAME, slider_html(), secs_html)
 
     return page_shell(
         "", None,
@@ -1500,11 +1711,11 @@ def build_detail(slug):
     )
 
 
-NAV_PAGES = ("unit-intro", "feedback", "cooperation")
+NAV_PAGES = ("unit-intro", "news", "feedback", "cooperation")
 
 
 def build_nav_page(slug):
-    """导航型页面（单位简介 / 意见建议 / 合作加盟）：不在 40 栏目网格内。"""
+    """导航型页面（单位简介 / 新闻报道 / 意见建议 / 合作加盟）：不在 40 栏目网格内。"""
     title, brief, blocks = CONTENT[slug]
     body = """
 <div class="crumb">
@@ -1567,7 +1778,7 @@ README = """# 精准营养技术网 · 原型站
 
 ```
 index.html            首页（网站简介 + 40 栏目网格 + 页脚）
-pages/*.html          40 个栏目详情页 + 3 个导航页（单位简介 / 意见建议 / 合作加盟）
+pages/*.html          40 个栏目详情页 + 4 个导航页（单位简介 / 新闻报道 / 意见建议 / 合作加盟）
 assets/style.css      全站样式
 assets/site.js        右侧咨询框 / 回到顶部等交互
 build.py              生成脚本（改内容后重新运行 python build.py 即可重建全站）
@@ -1576,8 +1787,10 @@ README.md             本说明
 
 ## 布局要点
 
-- 顶部深色导航（单位简介 / 合作加盟 / 意见建议 / 联系我们），首页正文居中标题 + 红色分隔线。
-- 首页上方为网站简介（四行居中，口号标红），下方直接平铺 40 个栏目，每排 5 个，点击卡片进入详情页。
+- 顶部深色导航（单位简介 / 新闻报道 / 合作加盟 / 意见建议 / 联系我们），首页正文居中标题 + 红色分隔线。
+- 首页顶部是轮播区（左右滑动 + 自动播放，约 5.2 秒一页）：第 1 页是本站简介，其余可放新闻播报、产品介绍等；支持箭头、圆点、触摸滑动，鼠标悬停自动暂停。
+- 轮播内容在 build.py 的 SLIDES 列表中维护：加一条记录 = 多一个滑动页，重跑 build.py 生效。
+- 轮播下方直接平铺 40 个栏目，每排 5 个，点击卡片进入详情页。
 - 右侧边缘悬浮"顾客咨询"竖标签，点击展开表单（原型不提交，仅本地提示）。
 - 右下角三个圆形工具按钮：电话、微信、回到顶部。
 - 页脚：主办单位、地址、电话、邮箱、二维码、备案号、科普免责声明。
@@ -1594,6 +1807,7 @@ README.md             本说明
 | 证书页 | 【占位】证书名称一/二/三 | 替换为真实证书扫描件 |
 | 图书页 | 【占位】《图书名称一/二/三》 | 替换为真实书名与封面 |
 | 文章页 | 主题分类框架 | 待填充真实文章列表 |
+| 首页轮播示例新闻 | 【示例】占位文案 | 把 build.py 里 SLIDES 中那条 news 记录换成真实新闻 |
 | 咨询表单 | 前端演示，无后端 | 上线需接后端接口或表单服务 |
 
 ## 内容说明
