@@ -294,15 +294,8 @@ a{color:inherit;text-decoration:none}
 .slide-text{font-size:14.5px;color:#6a6a6a;line-height:1.95;margin:0 0 8px;text-align:left}
 .slide-more{display:inline-block;margin-top:4px;font-size:13.5px;font-weight:600;color:var(--red);text-align:left}
 .slide-more:hover{text-decoration:underline}
-/* 按内容类型分色：本站简介=暖红 / 新闻报道=沉蓝 / 产品介绍=暖橙 */
-.slide-intro{--tone:var(--red);--tone-bg:#fff6f3;--tone-line:#f3d9d2}
-.slide-news{--tone:#1e5aa8;--tone-bg:#f3f7fc;--tone-line:#d6e2f1}
-.slide-product{--tone:#d97706;--tone-bg:#fff8ed;--tone-line:#f2e1c6}
-.slide-news .slide-tag{background:#1e5aa8}
-.slide-product .slide-tag{background:#d97706}
-.slide-news .slide-title{color:#173f74}
-.slide-news .slide-more{color:#1e5aa8}
-.slide-product .slide-more{color:#c2670a}
+/* 统一红色体系：全部类型共用站点主色（--tone 机制保留，日后要分色在此覆写即可） */
+.slide-intro,.slide-news,.slide-product{--tone:var(--red);--tone-bg:#fff6f3;--tone-line:#f3d9d2}
 .slider-arrow{
   position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;z-index:2;
   display:grid;place-items:center;cursor:pointer;border-radius:50%;
