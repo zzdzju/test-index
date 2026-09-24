@@ -334,3 +334,44 @@ git push
 ```
 
 GitHub Pages 会在推送后自动重新部署（通常几十秒内生效）。
+
+---
+
+## 八、实际发布记录（方案 B：API 直传已完成 ✅）
+
+因本机 git 直连 `github.com` 被重置（无代理环境），最终采用**方案 B：从沙箱走 `api.github.com`
+用 GitHub Contents API 把文件逐个 PUT 上传**，不依赖你本机网络。
+
+**已完成（2026-09-15）**：
+- 仓库 `zzdzju/test-index`（你网页建的，Private）已收到全部 **37 个文件**
+  （index.html + 27 个详情页 + assets 2 个 + .nojekyll + .gitignore + README + 本指南 + build.py）。
+- 校验通过：`index.html` 41304 字节、`pages/` 下 27 个详情页齐全、临时上传脚本已清理。
+- 本地临时文件（`_upload.py`/`_cleanup.py` 等）已删除，工作目录干净。
+
+**剩余唯一一步：开启 Pages**（沙箱 token 缺 Pages 写权限，需你来做）：
+
+> ⚠️ 当前仓库是 **Private**。GitHub 免费个人账号下，Pages **只对 Public 仓库开放**；
+> 若保持 Private，Pages 无法对外访问（你自己/协作者可见）。要做成可分享的网站，需先改 Public。
+
+**做法（任选其一）**：
+
+1. **网页手动开（最省事，2 下）**：
+   进 `https://github.com/zzdzju/test-index` → **Settings → Pages** →
+   Source 选 **Deploy from a branch** → Branch 选 **main** / folder **/ (root)** → **Save**。
+   若仓库是 Private 且免费账号，这里会提示需改 Public → 先去
+   **Settings → General → 最底部 Change repository visibility → Public**。
+
+2. **让我用 API 开（你需给带 Pages 权限的 token）**：
+   重发一个 fine-grained token，在 Repository permissions 里**额外把 `Pages` 设为 Read and write**
+   （Contents 保持 Read and write），仅授权 `test-index` 单库，发我后我调
+   `POST /repos/zzdzju/test-index/pages` 开启。
+
+**上线地址**：`https://zzdzju.github.io/test-index/`（部署后约 1–2 分钟生效）。
+
+**重要提醒**：
+- 你给的 token 权限较宽（该库 admin），**上传完成后请立即到 GitHub 撤销它**
+  （Settings → Developer settings → fine-grained tokens → 删除），避免凭据长期暴露。
+- 本地 `precision-nutrition-site/.git` 的提交历史与 GitHub 上 API 上传的提交**不是同一套**。
+  后续若想改用 `git push` 维护，需先 `git pull` 或 `git push --force` 对齐（当前阶段用 API 上传的内容为准）。
+- 公开前务必填真：页脚地址/电话/邮箱/二维码/备案号、证书页/图书页、文章正文；
+  改完跑 `python build.py` 重建，再重新 PUT 上传或 `git push`。
