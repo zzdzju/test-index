@@ -67,8 +67,16 @@
   var gap = parseInt(root.getAttribute('data-interval'), 10) || 5200;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  function resetBar() {
+    var fill = root.querySelector('.dot.is-active .dot-fill');
+    if (!fill) return;
+    fill.style.animation = 'none';
+    void fill.offsetWidth;
+    fill.style.animation = '';
+  }
   function render() {
     track.style.transform = 'translateX(' + (-idx * 100) + '%)';
+    resetBar();
     for (var i = 0; i < total; i++) {
       var on = i === idx;
       slides[i].classList.toggle('is-active', on);
@@ -80,10 +88,16 @@
     }
   }
   function go(n) { idx = ((n % total) + total) % total; render(); }
-  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+    root.classList.add('is-hold');
+  }
   function start() {
     if (reduce) return;
     stop();
+    root.style.setProperty('--slide-dur', gap + 'ms');
+    root.classList.remove('is-hold');
+    resetBar();
     timer = setInterval(function () { go(idx + 1); }, gap);
   }
   function jump(n) { stop(); go(n); start(); }
